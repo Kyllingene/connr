@@ -1,15 +1,15 @@
 section(rodata)
-myvar:(db "Hello, World!", 0)
+myvar: db("Hello, World!", 0)
 
 section(text)
 global(hello)
 
-hello:()
+hello:
 // open function
 push(rbp)
 mov(rbp, rsp)
 
-lea(rax, [myvar])
+lea(rax, [myvar]) // return "Hello, World!"
 
 // close function
 mov(rsp, rbp)

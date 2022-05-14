@@ -10,7 +10,7 @@ hello:
 push rbp
 mov rbp, rsp
 
-lea rax, [myvar]
+lea rax, [myvar] ; return "Hello, World!"
 
 ; close function
 mov rsp, rbp
