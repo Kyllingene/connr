@@ -2,15 +2,17 @@
 			Connr
                 COmpiled laNguage learNing pRoject
 
-        V1 Syntax Goal:
-                .section(x)    -> .section x
-                .section(text) -> .section text \n default rel
+        V1 Syntax Goal (COMPLETE):
+                section(x)    -> section .x
                 mov(x, y)      -> mov y, x
                 ...
 
         V2 Syntax Goal:
                 a = 20 -> (.section data) a: dq 20
 */
+
+// TODO: implement assignment
+
 import os
 
 struct Symbol {
@@ -47,7 +49,12 @@ fn tokenize_line(line string) Symbol {
 				current = ''
 				continue
 				
-			}
+			}/* else if c == '=' { // just read an assignment
+				op = '<assign>'
+				args << current.replace(' ', '')
+				in_args = true
+				continue
+			}*/
 			
 			current += c
 			
@@ -91,12 +98,16 @@ fn tokenize_line(line string) Symbol {
 	return Symbol{op, label, args, other}
 }
 
-fn format_tokens(token Symbol) string {
+fn format_tokens(token Symbol/*, globals map[string]string*/) string {
 	mut formatted := ''
 	
 	mut args := []string{}
-	if token.op == 'section' {
+	if token.op.to_lower() == 'section' {
 		args << '.' + token.args[0]
+	} else if token.op.to_lower() == 'mov' || token.op.to_lower() == 'lea' {
+		args << token.args[1]
+		args << token.args[0]
+	
 	} else {
 		args = token.args
 	}
@@ -132,6 +143,7 @@ fn main() {
 	println('INFO: Parsing file...')
 	lines := text.split_into_lines()
 	mut output := 'default rel\n'
+	//mut globals := map[string]string{}
 	for line in lines {
 		symbol := tokenize_line(line)
 		output += format_tokens(symbol) + "\n"
