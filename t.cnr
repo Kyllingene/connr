@@ -1,9 +1,2 @@
-a = 10
-b = "Hello, World!" // string
-
-global(_start)
-_start: {
-
-mov(a, rax)
-
-}
+a = "Hello, World!"
+puts(a)
